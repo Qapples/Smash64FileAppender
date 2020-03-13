@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Smash64FileAppender.ViewModels;assembly=Smash64FileAppender"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:Smash64FileAppender.Models"
+        mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="115"
+        x:Class="Smash64FileAppender.Views.PointerWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Smash64FileAppender">
+
+    <Design.DataContext>
+        <models:PointerModel />
+    </Design.DataContext>
+
+    <StackPanel>
+        <TextBlock HorizontalAlignment="Center" Height="50" Text="Enter the address of the first pointer (HEX)" />
+        <TextBox HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="75"
+                 Watermark="Input" Text="{Binding InputText}" />
+        <Button HorizontalAlignment="Center" Width="100" Height="25" Click="PointerButtonClick">Locate pointers</Button>
+    </StackPanel>
+
+
+</Window>

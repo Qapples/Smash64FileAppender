@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFrameworks>netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -17,5 +17,10 @@
     <PackageReference Include="Avalonia" Version="0.9.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.9.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.9.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="test1.bin" />
+    <None Remove="test2.bin" />
+    <None Remove="test3.bin" />
   </ItemGroup>
 </Project>

@@ -50,17 +50,14 @@ namespace Smash64FileAppender.Views
             //Update the pointer bytes. If there are already bytes, then search for the first pointer.
             if (prevLength > 0)
             {
-                for (int i = prevLength; i < _bytes.Count - 1 - prevLength; i += 2)
-                {
-                    //If these two bytes are equal to the start of the file (8), then we found the pointer.
-                    if (((_bytes[i] << 8) + _bytes[i + 1]) * 4 + prevLength == prevLength + 8)
-                    {
-                        firstPointerIndex = i - 2;
-                        break;
-                    }
-                }
+                PointerWindow pointerWindow = new PointerWindow();
+                pointerWindow.Show();
+
+                int index = pointerWindow.PointerIndex;
+                int offset = (addBytes[index + 2] << 4) + (addBytes[index + 3] - index);
+
                 //Follow the pointers and update them accordingly
-                await EditPointers(firstPointerIndex, prevLength);
+                //await EditPointers(firstPointerIndex, prevLength);
             }
 
             Console.WriteLine("\n" + firstPointerIndex.ToString("X"));
@@ -78,8 +75,8 @@ namespace Smash64FileAppender.Views
                 int pointerValue = ((_bytes[index] << 8) + _bytes[index + 1]);
                 _bytes[index] = (byte) ((pointerValue + length) << 8);
                 _bytes[index + 1] = (byte) (pointerValue + length);
+                Console.Write(index.ToString("X") + " " + _bytes[index] + " " +_bytes[index + 1].ToString("X2"));
                 index = pointerValue * 4;
-                Console.WriteLine(index.ToString("X"));
             }
 
             return Task.CompletedTask; 
