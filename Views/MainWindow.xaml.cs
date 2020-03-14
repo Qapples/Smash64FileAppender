@@ -13,12 +13,19 @@ namespace Smash64FileAppender.Views
 {
     public class MainWindow : Window
     {
-        List<byte> _bytes = new List<byte>();
+        public static List<byte> Bytes { get; set; }
+        public static List<byte> AddBytes { get; set; }
 
+        static PointerWindow _pointerWindow;
+        
         public MainWindow()
         {
             InitializeComponent();
             DataContext = new TextBoxModel() {InputText = "", OffsetText = ""};
+
+            Bytes = new List<byte>();
+            _pointerWindow = new PointerWindow();
+
             ClientSize = new Size(500, 500);
         }
 
@@ -37,49 +44,37 @@ namespace Smash64FileAppender.Views
             string[] fileNames = await dialog.ShowAsync(this);
             string output = "";
 
-            int prevLength = _bytes.Count;
+            int prevLength = Bytes.Count;
             int firstPointerIndex = 0;
 
             //Read bytes and change output
-            List<byte> addBytes = (await File.ReadAllBytesAsync(fileNames[0])).ToList();
-            _bytes.AddRange(addBytes);
-
-            //Last pointer is USUALLY the last two bytes (minus the 15 0's)
-            int lastPointerIndex = _bytes[^19];
+            AddBytes = (await File.ReadAllBytesAsync(fileNames[0])).ToList();
+            Bytes.AddRange(AddBytes);
 
             //Update the pointer bytes. If there are already bytes, then search for the first pointer.
             if (prevLength > 0)
             {
-                PointerWindow pointerWindow = new PointerWindow();
-                pointerWindow.Show();
-
-                int index = pointerWindow.PointerIndex;
-                int offset = (addBytes[index + 2] << 4) + (addBytes[index + 3] - index);
-
-                //Follow the pointers and update them accordingly
-                //await EditPointers(firstPointerIndex, prevLength);
+                //Open the window
+                _pointerWindow.Show();
             }
-
-            Console.WriteLine("\n" + firstPointerIndex.ToString("X"));
-
-            //string output = _bytes.Aggregate("", (current, b) => current + b.ToString("X2"));
 
             ((TextBoxModel) DataContext).InputText +=
-                addBytes.Aggregate("", (current, b) => current + b.ToString("X2"));
+                AddBytes.Aggregate("", (current, b) => current + b.ToString("X2"));
         }
 
-        public Task EditPointers(int index, int length)
+        public static void EditPointers()
         {
-            while (_bytes[index] != 0xFF)
+            int index = _pointerWindow.PointerIndex;
+            int offset = (AddBytes[index + 2] << 8) + AddBytes[index + 3] - 8;
+            int pointer = (AddBytes[index] << 8) + AddBytes[index + 1];
+
+            while (pointer < AddBytes.Count)
             {
-                int pointerValue = ((_bytes[index] << 8) + _bytes[index + 1]);
-                _bytes[index] = (byte) ((pointerValue + length) << 8);
-                _bytes[index + 1] = (byte) (pointerValue + length);
-                Console.Write(index.ToString("X") + " " + _bytes[index] + " " +_bytes[index + 1].ToString("X2"));
-                index = pointerValue * 4;
+                
             }
 
-            return Task.CompletedTask; 
+            Console.WriteLine(
+                $"Offset {offset:X2}. Index {index:X2}. Pointer {pointer:X2}. {AddBytes[index]:X2} {AddBytes[index + 1]:X2} {AddBytes[index + 2]:X2} {AddBytes[index + 3]:X2}");
         }
 
         public async void ExportClick(object sender, RoutedEventArgs e)

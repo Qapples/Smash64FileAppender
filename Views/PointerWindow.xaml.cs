@@ -25,6 +25,8 @@ namespace Smash64FileAppender.Views
         public void PointerButtonClick(object sender, RoutedEventArgs e)
         {
             PointerIndex = Convert.ToInt32((DataContext as PointerModel)?.InputText, 16);
+            MainWindow.EditPointers();
+            Close();
         }
         
         void InitializeComponent()
