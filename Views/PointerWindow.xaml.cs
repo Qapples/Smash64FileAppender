@@ -22,10 +22,10 @@ namespace Smash64FileAppender.Views
             ClientSize = new Size(250, 115);
         }
 
-        public void PointerButtonClick(object sender, RoutedEventArgs e)
+        public async void PointerButtonClick(object sender, RoutedEventArgs e)
         {
             PointerIndex = Convert.ToInt32((DataContext as PointerModel)?.InputText, 16);
-            MainWindow.EditPointers();
+            await MainWindow.EditPointers();
             Close();
         }
         
