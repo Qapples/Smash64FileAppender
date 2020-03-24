@@ -16,7 +16,7 @@
     <StackPanel>
         <TextBlock HorizontalAlignment="Center" Height="50" Text="Enter the address of the first pointer (HEX)" />
         <TextBox HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="75"
-                 Watermark="Input" Text="{Binding InputText}" />
+                 Watermark="Input" FontFamily="Courier New" FontSize="16" Text="{Binding InputText}" />
         <Button HorizontalAlignment="Center" Width="100" Height="25" Click="PointerButtonClick">Locate pointers</Button>
     </StackPanel>
 

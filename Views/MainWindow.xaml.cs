@@ -27,9 +27,10 @@ namespace Smash64FileAppender.Views
             _dataContext = DataContext;
 
             Bytes = new List<byte>();
+            AddBytes = new List<byte>();
             _pointerWindow = new PointerWindow();
 
-            ClientSize = new Size(500, 500);
+            ClientSize = new Size(540, 500);
         }
 
         public async void ImportClick(object sender, RoutedEventArgs e)
@@ -57,24 +58,29 @@ namespace Smash64FileAppender.Views
             int firstPointerIndex = 0;
 
             //Read bytes and change output
-            AddBytes = (await File.ReadAllBytesAsync(fileNames[0])).ToList();
-            Bytes.AddRange(AddBytes);
+            byte[] tempBytes = await File.ReadAllBytesAsync(fileNames[0]);
 
             //If there is already data, then show the window that asks the pointer location
             if (prevLength > 0)
             {
-                //Open the window
-                _pointerWindow.Show();
+                AddBytes.AddRange(tempBytes);
+                Bytes.AddRange(tempBytes);
+            }
+            else
+            {
+                Bytes.AddRange(tempBytes);
             }
             
             
             ((TextBoxModel) DataContext).InputText +=
-                AddBytes.Aggregate("", (current, b) => current + b.ToString("X2"));
+                tempBytes.Aggregate("", (current, b) => current + b.ToString("X2") + " ");
         }
 
-        public static Task EditPointers()
+        public static void EditPointers(object sender, RoutedEventArgs e)
         {
-            int index = _pointerWindow.PointerIndex;
+            if (Bytes.Count <= 0) return;
+
+            int index = Convert.ToInt32(((TextBoxModel) _dataContext).OffsetText, 16);
             int offset = ((AddBytes[index + 2] << 8) + AddBytes[index + 3]) * 4 - 8;
 
             //Next pointer
@@ -136,8 +142,7 @@ namespace Smash64FileAppender.Views
             Bytes.AddRange(AddBytes);
             ((TextBoxModel) _dataContext).InputText +=
                 AddBytes.Aggregate("", (current, b) => current + b.ToString("X2"));
-
-            return Task.CompletedTask;
+            
         }
 
         public async void ExportClick(object sender, RoutedEventArgs e)

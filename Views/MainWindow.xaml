@@ -3,13 +3,14 @@
         xmlns:vm="clr-namespace:Smash64FileAppender.ViewModels;assembly=Smash64FileAppender"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:Smash64FileAppender.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Smash64FileAppender.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="Smash64FileAppender">
 
     <Design.DataContext>
-        <vm:TextBoxModel />
+        <models:TextBoxModel />
     </Design.DataContext>
 
     <StackPanel>
@@ -17,19 +18,25 @@
             <DockPanel>
                 <Menu DockPanel.Dock="Top">
                     <MenuItem Header="_File">
-                        <MenuItem Header="Import" Click="ImportClick"/>
+                        <MenuItem Header="Import" Click="ImportClick" />
                         <Separator />
-                        <MenuItem Header="Export" Click="ExportClick"/>
+                        <MenuItem Header="Export" Click="ExportClick" />
                     </MenuItem>
                 </Menu>
             </DockPanel>
-        </StackPanel>
-        <Grid ColumnDefinitions="0.5*, 0.5*" RowDefinitions="0.25*, 500">
-
-            <TextBox HorizontalAlignment="Left" AcceptsReturn="True" Height="500" Width="400" TextWrapping="Wrap"
-                     Watermark="Input" Text="{Binding InputText}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="1" />
             <TextBox HorizontalAlignment="Right" VerticalAlignment="Top" AcceptsReturn="False" TextWrapping="Wrap"
-                     Watermark="Offset" Text="{Binding OffsetText}" Height="30" Width="65" Grid.Row="0" Grid.Column="1" />
+                     Watermark="Offset" FontFamily="Courier New" FontSize="16" Text="{Binding OffsetText}"
+                     Height="30" Width="65" Grid.Row="0" Grid.Column="1" />
+            <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Width="100"
+                    Height="25" Click="EditPointers">
+                Locate pointers
+            </Button>
+        </StackPanel>
+        <Grid ColumnDefinitions="0.5*, 0.5*" RowDefinitions="0.25*, 0.25*">
+
+            <TextBox HorizontalAlignment="Left" AcceptsReturn="True" Height="500" Width="440" TextWrapping="Wrap"
+                     Watermark="Input" FontFamily="Courier New" FontSize="16" Text="{Binding InputText}" Grid.Row="0"
+                     Grid.Column="0" Grid.RowSpan="1" />
         </Grid>
     </StackPanel>
 
