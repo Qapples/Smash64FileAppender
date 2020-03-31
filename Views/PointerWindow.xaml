@@ -16,7 +16,9 @@
     <StackPanel>
         <TextBlock HorizontalAlignment="Center" Height="50" Text="Enter the address of the first pointer (HEX)" />
         <TextBox HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="75"
-                 Watermark="Input" FontFamily="Courier New" FontSize="16" Text="{Binding InputText}" />
+                 Watermark="Location" FontFamily="Courier New" FontSize="16" Text="{Binding LocationText}" />
+        <TextBox HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="30" Width="75"
+                 Watermark="Offset" FontFamily="Courier New" FontSize="16" Text="{Binding OffsetText}" />
         <Button HorizontalAlignment="Center" Width="100" Height="25" Click="PointerButtonClick">Locate pointers</Button>
     </StackPanel>
 

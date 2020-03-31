@@ -18,13 +18,13 @@ namespace Smash64FileAppender.Views
         public PointerWindow()
         {
             InitializeComponent();
-            DataContext = new PointerModel() {InputText = ""};
+            DataContext = new PointerModel() {LocationText = ""};
             ClientSize = new Size(250, 115);
         }
 
         public async void PointerButtonClick(object sender, RoutedEventArgs e)
         {
-            PointerIndex = Convert.ToInt32((DataContext as PointerModel)?.InputText, 16);
+            PointerIndex = Convert.ToInt32((DataContext as PointerModel)?.LocationText, 16);
             Close();
         }
         

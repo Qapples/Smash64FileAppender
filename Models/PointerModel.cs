@@ -5,20 +5,34 @@ namespace Smash64FileAppender.Models
 {
     public class PointerModel
     {
-        string _inputText;
+        string _locationText;
+        string _offsetText;
         
         /// <summary>
         /// Text of the input.
         /// </summary>
-        public string InputText
+        public string LocationText
         {
-            get => _inputText;
+            get => _locationText;
             set
             {
-                if (value != _inputText)
+                if (value != _locationText)
                 {
-                    _inputText = value;
-                    OnPropertyChanged(nameof(InputText));
+                    _locationText = value;
+                    OnPropertyChanged(nameof(LocationText));
+                }
+            }
+        }
+
+        public string OffsetText
+        {
+            get => _offsetText;
+            set
+            {
+                if (value != _offsetText)
+                {
+                    _offsetText = value;
+                    OnPropertyChanged(nameof(OffsetText));
                 }
             }
         }

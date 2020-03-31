@@ -61,11 +61,12 @@ namespace Smash64FileAppender.Views
 
             //Read bytes and change output
             byte[] tempBytes = await File.ReadAllBytesAsync(fileNames[0]);
+            AddBytes = tempBytes.ToList();
 
             //If there is already data, then show the window that asks the pointer location
             if (prevLength > 0)
             {
-                AddBytes.AddRange(tempBytes);
+                originalByteCount = Bytes.Count;
                 Bytes.AddRange(tempBytes);
             }
             else
@@ -99,7 +100,7 @@ namespace Smash64FileAppender.Views
             Bytes[originalByteCount - 20] = (byte) (firstPointerLocation >> 8);
             Bytes[originalByteCount - 19] = (byte) (firstPointerLocation & 0xFF);
 
-            Console.WriteLine($"First: {pointer:X} {fileLocation:X} {offset:X} {index:X}");
+            Console.WriteLine($"First: {pointer:X} {fileLocation:X} {offset:X} {index:X} {originalByteCount:X}");
 
             //Modify the pointers
             AddBytes[index] = (byte) ((pointer & 0xFF00) >> 8);
@@ -150,7 +151,6 @@ namespace Smash64FileAppender.Views
             Bytes.AddRange(AddBytes);
             ((TextBoxModel) _dataContext).InputText +=
                 AddBytes.Aggregate("", (current, b) => current + b.ToString("X2"));
-            
         }
 
         public async void ExportClick(object sender, RoutedEventArgs e)
