@@ -19,6 +19,8 @@ namespace Smash64FileAppender.Views
 
         static PointerWindow _pointerWindow;
         static object _dataContext;
+
+        static int originalByteCount;
         
         public MainWindow()
         {
@@ -29,6 +31,7 @@ namespace Smash64FileAppender.Views
             Bytes = new List<byte>();
             AddBytes = new List<byte>();
             _pointerWindow = new PointerWindow();
+            originalByteCount = 0;
 
             ClientSize = new Size(540, 500);
         }
@@ -55,7 +58,6 @@ namespace Smash64FileAppender.Views
             }
 
             int prevLength = Bytes.Count;
-            int firstPointerIndex = 0;
 
             //Read bytes and change output
             byte[] tempBytes = await File.ReadAllBytesAsync(fileNames[0]);
@@ -69,8 +71,8 @@ namespace Smash64FileAppender.Views
             else
             {
                 Bytes.AddRange(tempBytes);
+                originalByteCount = tempBytes.Length;
             }
-            
             
             ((TextBoxModel) DataContext).InputText +=
                 tempBytes.Aggregate("", (current, b) => current + b.ToString("X2") + " ");
@@ -90,7 +92,13 @@ namespace Smash64FileAppender.Views
             //Location of the start of the file 
             int fileLocation = (((AddBytes[index + 2] << 8) + AddBytes[index + 3]) * 4 - offset + Bytes.Count -
                                 AddBytes.Count) / 4;
-            
+
+            //Update the last pointer in the og file
+            int firstPointerLocation = (index + originalByteCount) / 4;
+
+            Bytes[originalByteCount - 20] = (byte) (firstPointerLocation >> 8);
+            Bytes[originalByteCount - 19] = (byte) (firstPointerLocation & 0xFF);
+
             Console.WriteLine($"First: {pointer:X} {fileLocation:X} {offset:X} {index:X}");
 
             //Modify the pointers
@@ -167,25 +175,6 @@ namespace Smash64FileAppender.Views
             }
 
             await File.WriteAllBytesAsync(fileName, Bytes.ToArray());
-            /*
-            await using (StreamWriter writer = new StreamWriter(fileName))
-            {
-                await writer.WriteAsync(AddBytes.Select(c => (char) c).ToArray());
-                for (int i = 0; i < AddBytes.Count; i++)
-                {
-                    if (i % 25 == 0)
-                    {
-                        Console.WriteLine();
-                    }
-
-                    Console.Write($"{AddBytes[i]:X2} {i:X2}   ");
-                }
-
-                await writer.WriteAsync((char) 100);
-                await writer.WriteAsync((char) 97);
-
-                await writer.FlushAsync();
-            }*/
 
             Console.WriteLine("finished");
         }
