@@ -138,12 +138,6 @@ namespace Smash64FileAppender.Views
 
             Console.WriteLine($"A {fileLocation:X} {pointer:X} {prevPointer:X} {Bytes.Count} {AddBytes.Count}");
 
-            //Modify the last pointers
-            AddBytes[prevPointer - (Bytes.Count - AddBytes.Count)] = 0xFF;
-            AddBytes[prevPointer + 1 - (Bytes.Count - AddBytes.Count)] = 0xFF;
-            AddBytes[prevPointer + 2 - (Bytes.Count - AddBytes.Count)] = (byte) ((fileLocation & 0xFF00) >> 8);
-            AddBytes[prevPointer + 3 - (Bytes.Count - AddBytes.Count)] = (byte) (fileLocation & 0xFF);
-
             //Re add the bytes
             Bytes.RemoveRange(Bytes.Count - AddBytes.Count, AddBytes.Count);
             ((TextBoxModel) _dataContext).InputText.Remove(Bytes.Count - AddBytes.Count);
